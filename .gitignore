@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+
+# Secrets
+.env
+.env.*
+
+# Local datasets and model artifacts
+data/
+artifacts/
+
+# Test and lint caches
+.pytest_cache/
+.ruff_cache/
