@@ -8,6 +8,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session 
 from complaintiq.database import get_db
 from complaintiq.models import Complaint
+from complaintiq.retrieval import search_policy
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -32,11 +33,17 @@ def create_complaint(
     predicted_category = request.app.state.classifier.predict([complaint.complaint_text])[0]
     probabilites = request.app.state.classifier.predict_proba([complaint.complaint_text])[0]
     confidence = float(max(probabilites))
+    relevant_policies= search_policy(complaint.complaint_text)
+    
+    for content, distance in relevant_policies:
+        print(f"Policy: {content}")
+        print(f"Distance: {distance:.4f}")
+        
     new_complaint = Complaint(
         customer_id= complaint.customer_id,
         complaint_text=complaint.complaint_text,
         predicted_category=predicted_category,
-        confidence=confidence,      
+        confidence=confidence,   
     )
     db.add(new_complaint)
     try:

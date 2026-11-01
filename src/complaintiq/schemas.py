@@ -13,6 +13,7 @@ class ComplaintResponse(BaseModel):
     complaint_text:str
     predicted_category: str
     confidence: float
+    relevant_policies: list[dict]
     
     
 class ComplaintRecord(BaseModel):
